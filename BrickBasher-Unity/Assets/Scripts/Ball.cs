@@ -19,6 +19,7 @@ public class Ball : MonoBehaviour
     [Header("General Settings")]
     public GameObject paddle; //ref to our paddle
     public int number_of_balls; // how many lives we have
+    public int current_balls; // store our max live
     public int score; // our current score
     public Text ball_lives; // visualise our lives
     public Text ball_score; // visualise our score
@@ -44,6 +45,7 @@ public class Ball : MonoBehaviour
         // Start is called before the first frame update
     void Start()
     {
+        current_balls = number_of_balls;
         SetStartingPos(); //set the starting position
     }//end Start()
 
@@ -51,7 +53,7 @@ public class Ball : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ball_lives.text = "Balls: " + number_of_balls; // Update ui lives
+        ball_lives.text = "Balls: " + current_balls; // Update ui lives
         ball_score.text = "Score: " + score; // Update UI score
 
         // Set txt of score and lives
@@ -104,10 +106,13 @@ public class Ball : MonoBehaviour
     {
         if(other.tag == "OutBounds")
         {
-            if (number_of_balls < 0) // If we ran out of lives lose our score
+            if (current_balls == 0) // If we ran out of lives lose our score
+            {
+                current_balls = number_of_balls;
                 score = 0;
+            }
             else
-                number_of_balls--; // Lose a life
+                current_balls--; // Lose a life
 
             Invoke(nameof(SetStartingPos), 2); // Either way, we want to restart the ball on the paddle
         }
